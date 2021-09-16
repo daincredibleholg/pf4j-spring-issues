@@ -1,1 +1,6 @@
 rootProject.name = 'pf4j-issues-gen'
+
+
+include("app")
+include("shared")
+include("sample-plugin")

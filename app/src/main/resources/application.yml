@@ -1,0 +1,8 @@
+logging:
+  level:
+    com.example: TRACE
+    org.pf4j: DEBUG
+
+demo:
+  plugins:
+    path: "sample-plugin/build/libs"

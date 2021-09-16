@@ -1,0 +1,64 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+
+group = 'com.example'
+version = '0.0.1'
+description = 'Sample plugin'
+
+jar {
+    enabled = true
+    manifest {
+        attributes(
+                "Plugin-Class": "com.example.plugin.SamplePlugin",
+                "Plugin-Id": "sample-plugin",
+                "Plugin-Version": "${project.version}",
+                "Plugin-Requires": "1.0.0",
+                "Plugin-Dependencies": '',
+                "Plugin-Description": "",
+                "Plugin-Provider": "",
+                "Plugin-License": "proprietary"
+        )
+    }
+}
+
+task plugin(type: Jar) {
+    archiveExtension ='zip'
+    into('classes') {
+        with jar
+    }
+    into('lib') {
+        from configurations.runtimeClasspath
+        exclude('**/shared*')
+        exclude('**/pf4j*')
+        exclude('**/spring-boot-starter-2*')
+        exclude('**/spring-context-*')
+        exclude('**/spring-beans-*')
+    }
+
+}
+
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    implementation project(':shared')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation("org.pf4j:pf4j-spring:${pf4jSpringVersion}") {
+        exclude group: "org.slf4j"
+    }
+    annotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
